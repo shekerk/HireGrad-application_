@@ -10,7 +10,6 @@ import com.hiregrad.backend.profile.entity.StudentProfile;
 import com.hiregrad.backend.profile.repository.StudentProfileRepository;
 import com.hiregrad.backend.user.entity.User;
 import com.hiregrad.backend.user.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,11 +18,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 public class StudentProfileService {
 
     private final StudentProfileRepository profileRepository;
     private final UserRepository userRepository;
+
+    public StudentProfileService(StudentProfileRepository profileRepository, UserRepository userRepository) {
+        this.profileRepository = profileRepository;
+        this.userRepository = userRepository;
+    }
 
     @Transactional(readOnly = true)
     public ProfileDto getProfile(String username) {

@@ -129,7 +129,8 @@
           </div>
           <div>
             <label class="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">Address</label>
-            <input id="profile-address-input" formControlName="address" class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-900 outline-none transition focus:border-brand-400 focus:ring-2 focus:ring-brand-400/30 disabled:cursor-default disabled:bg-slate-50 disabled:text-slate-500 dark:border-slate-700 dark:bg-slate-900 dark:text-white dark:disabled:bg-slate-800/50" />
+            <input id="profile-address-input" formControlName="address" class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-900 outline-none transition focus:border-brand-400 focus:ring-2 focus:ring-brand-400/30 disabled:cursor-default disabled:bg-slate-50 disabled:text-slate-500 dark:border-slate-700 dark:bg-slate-900 dark:text-white dark:disabled:bg-slate-800/50" [class.border-red-400]="f.address.invalid && f.address.touched" />
+            @if (f.address.invalid && f.address.touched) { <p class="mt-1 text-xs text-red-500">Address is required.</p> }
           </div>
           <div>
             <label class="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">Institute email</label>
@@ -149,7 +150,7 @@
               </select>
               <input id="profile-phone-input" formControlName="phone" inputmode="numeric" class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-900 outline-none transition focus:border-brand-400 focus:ring-2 focus:ring-brand-400/30 disabled:cursor-default disabled:bg-slate-50 disabled:text-slate-500 dark:border-slate-700 dark:bg-slate-900 dark:text-white dark:disabled:bg-slate-800/50" [class.border-red-400]="f.phone.invalid && f.phone.touched" />
             </div>
-            @if (f.phone.invalid && f.phone.touched) { <p class="mt-1 text-xs text-red-500">Enter a valid phone number (7–15 digits).</p> }
+            @if (f.phone.invalid && f.phone.touched) { <p class="mt-1 text-xs text-red-500">Phone number must be exactly 10 digits.</p> }
           </div>
         </form>
       </section>
@@ -236,7 +237,7 @@
                style="animation-delay:320ms; transform-style:preserve-3d; transition:transform .25s ease, box-shadow .3s ease">
         <h3 class="mb-4 text-sm font-bold text-slate-900 dark:text-white">Resume</h3>
 
-        <!-- file option -->
+        <!-- file option: show existing uploaded resume; no new file upload -->
         @if (resumeFileName()) {
           <div class="flex items-center justify-between gap-3 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 dark:border-slate-700 dark:bg-slate-800/50">
             <span class="flex items-center gap-2 truncate text-sm text-slate-700 dark:text-slate-200">
@@ -248,12 +249,6 @@
               @if (editing()) { <button (click)="removeResume()" class="text-xs text-slate-400 hover:text-red-500">Remove</button> }
             </span>
           </div>
-        } @else if (editing()) {
-          <label class="flex cursor-pointer items-center justify-center gap-2 rounded-xl border border-dashed border-slate-300 px-4 py-5 text-sm text-slate-500 transition hover:border-brand-400 hover:text-brand-600 dark:border-slate-700">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="17 8 12 3 7 8" /><line x1="12" x2="12" y1="3" y2="15" /></svg>
-            Upload PDF or DOCX
-            <input type="file" accept=".pdf,.doc,.docx" class="hidden" (change)="onResume($event)" />
-          </label>
         } @else {
           <p class="text-sm text-slate-400">No resume uploaded.</p>
         }
@@ -355,10 +350,18 @@
         @if (editing()) {
           <div class="mt-4 flex flex-wrap items-center gap-2">
             <span class="text-sm font-medium text-slate-500 dark:text-slate-400">Add:</span>
-            <button (click)="addLink('github')" class="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 px-3 py-1.5 text-sm font-medium text-slate-600 transition hover:border-brand-400 hover:text-brand-600 dark:border-slate-700 dark:text-slate-300">GitHub</button>
-            <button (click)="addLink('leetcode')" class="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 px-3 py-1.5 text-sm font-medium text-slate-600 transition hover:border-brand-400 hover:text-brand-600 dark:border-slate-700 dark:text-slate-300">LeetCode</button>
-            <button (click)="addLink('linkedin')" class="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 px-3 py-1.5 text-sm font-medium text-slate-600 transition hover:border-brand-400 hover:text-brand-600 dark:border-slate-700 dark:text-slate-300">LinkedIn</button>
-            <button (click)="addLink('portfolio')" class="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 px-3 py-1.5 text-sm font-medium text-slate-600 transition hover:border-brand-400 hover:text-brand-600 dark:border-slate-700 dark:text-slate-300">Portfolio</button>
+            @if (!isLinkTypeAdded('github')) {
+              <button (click)="addLink('github')" class="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 px-3 py-1.5 text-sm font-medium text-slate-600 transition hover:border-brand-400 hover:text-brand-600 dark:border-slate-700 dark:text-slate-300">GitHub</button>
+            }
+            @if (!isLinkTypeAdded('leetcode')) {
+              <button (click)="addLink('leetcode')" class="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 px-3 py-1.5 text-sm font-medium text-slate-600 transition hover:border-brand-400 hover:text-brand-600 dark:border-slate-700 dark:text-slate-300">LeetCode</button>
+            }
+            @if (!isLinkTypeAdded('linkedin')) {
+              <button (click)="addLink('linkedin')" class="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 px-3 py-1.5 text-sm font-medium text-slate-600 transition hover:border-brand-400 hover:text-brand-600 dark:border-slate-700 dark:text-slate-300">LinkedIn</button>
+            }
+            @if (!isLinkTypeAdded('portfolio')) {
+              <button (click)="addLink('portfolio')" class="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 px-3 py-1.5 text-sm font-medium text-slate-600 transition hover:border-brand-400 hover:text-brand-600 dark:border-slate-700 dark:text-slate-300">Portfolio</button>
+            }
             <button (click)="addLink('custom')" class="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 px-3 py-1.5 text-sm font-medium text-slate-600 transition hover:border-brand-400 hover:text-brand-600 dark:border-slate-700 dark:text-slate-300">+ Custom</button>
           </div>
         }

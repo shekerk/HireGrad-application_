@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
-import { roleGuard } from './core/guards/role.guard';
+import { roleGuard, mustChangePwdGuard } from './core/guards/role.guard';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'login' },
@@ -18,7 +18,7 @@ export const routes: Routes = [
   },
   {
     path: 'student',
-    canActivate: [authGuard, roleGuard('STUDENT')],
+    canActivate: [authGuard, roleGuard('STUDENT'), mustChangePwdGuard],
     loadComponent: () =>
       import('./features/student/layout/student-layout.component').then(
         (m) => m.StudentLayoutComponent

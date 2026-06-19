@@ -16,27 +16,18 @@ public class DataInitializer implements CommandLineRunner {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    @Value("${app.seed.admin.username}")    private String adminUsername;
-    @Value("${app.seed.admin.password}")    private String adminPassword;
-    @Value("${app.seed.admin.full-name}")   private String adminFullName;
-
-    @Value("${app.seed.student.username}")  private String studentUsername;
-    @Value("${app.seed.student.password}")  private String studentPassword;
-    @Value("${app.seed.student.full-name}") private String studentFullName;
+    @Value("${app.seed.admin.username}")  private String adminUsername;
+    @Value("${app.seed.admin.password}")  private String adminPassword;
+    @Value("${app.seed.admin.full-name}") private String adminFullName;
 
     @Override
     public void run(String... args) {
-        seed(adminUsername, adminPassword, adminFullName, Role.ADMIN);
-        seed(studentUsername, studentPassword, studentFullName, Role.STUDENT);
-    }
-
-    private void seed(String username, String rawPassword, String fullName, Role role) {
-        if (!userRepository.existsByUsername(username)) {
+        if (!userRepository.existsByUsername(adminUsername)) {
             userRepository.save(User.builder()
-                    .username(username)
-                    .password(passwordEncoder.encode(rawPassword)) // BCrypt hash
-                    .fullName(fullName)
-                    .role(role)
+                    .username(adminUsername)
+                    .password(passwordEncoder.encode(adminPassword))
+                    .fullName(adminFullName)
+                    .role(Role.ADMIN)
                     .enabled(true)
                     .build());
         }

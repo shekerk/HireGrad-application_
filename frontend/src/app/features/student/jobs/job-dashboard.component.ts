@@ -7,6 +7,21 @@ import { TiltDirective } from '../../../shared/directives/tilt.directive';
 
 type ResumeRef = { name: string; source: 'profile' | 'uploaded' };
 
+/** Minimum fields the student must have filled before they can apply. */
+interface ProfileSnapshot {
+  firstName: string | null;
+  lastName: string | null;
+  instituteEmail: string | null;
+  phone: string | null;
+  address: string | null;
+  college: string | null;
+  course: string | null;
+  passOutYear: string | null;
+  cgpa: string | null;
+  resumeFileName: string | null;
+  resumeLink: string | null;
+}
+
 @Component({
   selector: 'app-job-dashboard',
   imports: [CommonModule, TiltDirective],
@@ -35,6 +50,46 @@ export class JobDashboardComponent {
   openMenu = signal<number | null>(null);
   toast = signal<{ type: 'success' | 'error'; msg: string } | null>(null);
 
+  // === Profile completeness & CGPA eligibility ===
+  private profileSnapshot = signal<ProfileSnapshot | null>(null);
+  profileResumeLink = signal<string | null>(null); // resume link URL from profile
+
+  /** True only when all required profile sections are filled. */
+  profileComplete = computed(() => {
+    const p = this.profileSnapshot();
+    if (!p) return false;
+    const hasPersonal = !!(p.firstName && p.lastName && p.instituteEmail && p.phone && p.address);
+    const hasAcademic = !!(p.college && p.course && p.passOutYear && p.cgpa);
+    const hasResume   = !!(p.resumeFileName || p.resumeLink);
+    return hasPersonal && hasAcademic && hasResume;
+  });
+
+  /** Student's numeric CGPA (null if not filled). */
+  studentCgpa = computed(() => {
+    const raw = this.profileSnapshot()?.cgpa;
+    if (!raw) return null;
+    const n = parseFloat(raw);
+    return isNaN(n) ? null : n;
+  });
+
+  /** Returns a human-readable reason why the Apply button is disabled, or null if the student can apply. */
+  applyDisabledReason(job: JobResponse): string | null {
+    if (!this.profileComplete()) {
+      return 'Complete your personal info, academic details, and resume to apply.';
+    }
+    const minCgpa = job.minCgpa;
+    const myCgpa  = this.studentCgpa();
+    if (minCgpa !== null && minCgpa !== undefined && (myCgpa === null || myCgpa < minCgpa)) {
+      return `Your CGPA (${myCgpa ?? '—'}) is below the minimum CGPA of ${minCgpa} required for this job.`;
+    }
+    return null;
+  }
+
+  /** True when the student meets all criteria to apply for this job. */
+  canApply(job: JobResponse): boolean {
+    return this.applyDisabledReason(job) === null;
+  }
+
   readonly typeChips = [
     { value: 'All', label: 'All' }, { value: 'FULL_TIME', label: 'Full-time' },
     { value: 'INTERNSHIP', label: 'Internship' }, { value: 'PART_TIME', label: 'Part-time' },
@@ -45,9 +100,18 @@ export class JobDashboardComponent {
   ] as const;
 
   constructor() {
-    // === INTEGRATION POINT: default resume from the student's profile ===
+    // === INTEGRATION POINT: load profile — auto-populate resume (filename or link) ===
     this.profileService.getProfile().subscribe({
-      next: (p) => this.profileResume.set(p.resumeFileName ?? null),
+      next: (p) => {
+        this.profileResume.set(p.resumeFileName ?? null);
+        this.profileResumeLink.set(p.resumeLink ?? null);
+        this.profileSnapshot.set({
+          firstName: p.firstName, lastName: p.lastName,
+          instituteEmail: p.instituteEmail, phone: p.phone, address: p.address,
+          college: p.college, course: p.course, passOutYear: p.passOutYear, cgpa: p.cgpa,
+          resumeFileName: p.resumeFileName, resumeLink: p.resumeLink,
+        });
+      },
       error: () => {},
     });
     // === INTEGRATION POINT: GET /api/student/jobs ===
@@ -83,7 +147,10 @@ export class JobDashboardComponent {
   resumeFor(jobId: number): ResumeRef | null {
     const override = this.resumeByJob()[jobId];
     if (override) return override;
-    return this.profileResume() ? { name: this.profileResume()!, source: 'profile' } : null;
+    // Auto-use profile resume: filename takes priority, resume link is fallback
+    if (this.profileResume()) return { name: this.profileResume()!, source: 'profile' };
+    if (this.profileResumeLink()) return { name: this.profileResumeLink()!, source: 'profile' };
+    return null;
   }
 
   lpa(ctc: number | null): string {
@@ -99,18 +166,13 @@ export class JobDashboardComponent {
     this.resumeByJob.update((m) => { const c = { ...m }; delete c[jobId]; return c; });
     this.openMenu.set(null);
   }
-  onUpload(jobId: number, e: Event) {
-    const file = (e.target as HTMLInputElement).files?.[0];
-    if (!file) return;
-    this.resumeByJob.update((m) => ({ ...m, [jobId]: { name: file.name, source: 'uploaded' } }));
-    this.openMenu.set(null);
-  }
 
   apply(job: JobResponse) {
+    const reason = this.applyDisabledReason(job);
+    if (reason) { this.showToast('error', reason); return; }
     const resume = this.resumeFor(job.id);
     if (!resume) { this.showToast('error', 'Add a resume before applying.'); return; }
-    // === INTEGRATION POINT: POST /api/student/applications — persists with status APPLIED,
-    // surfacing instantly in the student's tracker and the admin's application management. ===
+    // === INTEGRATION POINT: POST /api/student/applications ===
     this.applicationService.apply({ jobId: job.id, resumeFileName: resume.name }).subscribe({
       next: () => {
         this.applied.update((s) => new Set(s).add(job.id));

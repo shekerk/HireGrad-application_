@@ -40,11 +40,11 @@ export class StudentProfileComponent {
   private auth = inject(AuthService);
   private router = inject(Router);
 
-  // dropdown sources
+  // dropdown sources — only IN, CA, US as requested
   readonly countryCodes = [
-    { code: '+91', label: '🇮🇳 +91' }, { code: '+1', label: '🇺🇸 +1' },
-    { code: '+44', label: '🇬🇧 +44' }, { code: '+61', label: '🇦🇺 +61' },
-    { code: '+65', label: '🇸🇬 +65' }, { code: '+971', label: '🇦🇪 +971' },
+    { code: '+91', label: '🇮🇳 IN +91' },
+    { code: '+1',  label: '🇺🇸 US +1'  },
+    { code: '+1',  label: '🇨🇦 CA +1'  },
   ];
   readonly courses = ['Computer Science', 'Information Technology', 'Electronics & Communication', 'Electrical', 'Mechanical', 'Civil'];
   readonly passOutYears = Array.from({ length: 8 }, (_, i) => (new Date().getFullYear() - 2 + i).toString());
@@ -57,8 +57,8 @@ export class StudentProfileComponent {
     instituteEmail: ['', [Validators.required, Validators.email]],
     personalEmail: ['', [Validators.required, Validators.email]],
     countryCode: ['+91'],
-    phone: ['', [Validators.required, Validators.pattern(/^\d{7,15}$/)]],
-    address: [''],
+    phone: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]],
+    address: ['', Validators.required],
     tenthSchool: [''],
     tenthPercent: ['', percentValidator],
     twelfthSchool: [''],
@@ -245,7 +245,13 @@ export class StudentProfileComponent {
   }
 
   // ---------- links ----------
+  /** Returns true when a unique-once link type (github, leetcode, linkedin, portfolio) is already in the list. */
+  isLinkTypeAdded(type: string): boolean {
+    if (type === 'custom') return false; // custom can be added multiple times
+    return this.links().some((l) => l.type === type);
+  }
   addLink(type: string) {
+    if (this.isLinkTypeAdded(type)) return; // prevent duplicate entries for specific platforms
     const label = this.linkTypes[type]?.label ?? 'Link';
     this.links.update((a) => [...a, { type, label, url: '' }]);
   }

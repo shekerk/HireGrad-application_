@@ -15,3 +15,17 @@ export const roleGuard = (allowed: UserRole): CanActivateFn => {
     return router.createUrlTree(['/login']);
   };
 };
+
+/**
+ * Blocks student access to the portal until they have changed their
+ * temporary password. Redirects to /change-password when mustChangePassword is true.
+ */
+export const mustChangePwdGuard: CanActivateFn = () => {
+  const auth = inject(AuthService);
+  const router = inject(Router);
+  const user = auth.user();
+  if (user?.role === 'STUDENT' && user?.mustChangePassword) {
+    return router.createUrlTree(['/change-password']);
+  }
+  return true;
+};

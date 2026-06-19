@@ -4,16 +4,6 @@
     <app-logo />
 
     <div class="flex items-center gap-2 sm:gap-3">
-      <!-- live search -->
-      <div class="relative hidden sm:block">
-        <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8" /><path d="m21 21-4.3-4.3" /></svg>
-        </span>
-        <input id="student-layout-search-input" type="text" placeholder="Search jobs, companies…"
-               [value]="search()" (input)="search.set($any($event.target).value)" (keyup.enter)="goSearch()"
-               class="w-44 rounded-xl border border-slate-200 bg-white/80 py-2 pl-9 pr-3 text-sm text-slate-700 outline-none transition-all focus:w-64 focus:border-brand-400 focus:ring-2 focus:ring-brand-400/30 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:placeholder-slate-500 md:w-56" />
-      </div>
-
       <!-- notification bell -->
       <div #bellMenu class="relative">
         <button id="student-layout-bell-btn" (click)="toggleBell()" aria-label="Notifications"
