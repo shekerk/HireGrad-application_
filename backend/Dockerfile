@@ -1,9 +1,14 @@
-FROM maven:3.9-amazoncorretto-21 AS build
+# Stage 1: Build the JAR
+FROM eclipse-temurin:21-jdk AS build
 WORKDIR /app
-COPY . .
-RUN mvn clean package -DskipTests
 
-FROM amazoncorretto:21
+COPY . .
+RUN chmod +x mvnw && ./mvnw clean package -DskipTests -B
+
+# Stage 2: Run the JAR
+FROM eclipse-temurin:21-jre-alpine
+
 WORKDIR /app
-COPY --from=build /app/target/backend-0.0.1-SNAPSHOT.jar app.jar
+COPY --from=build /app/target/*.jar app.jar
+
 ENTRYPOINT ["java", "-jar", "app.jar"]
