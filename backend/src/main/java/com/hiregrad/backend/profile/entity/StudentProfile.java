@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "student_profiles")
+@Table(name = "`student_profiles`")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -20,7 +20,7 @@ import java.util.List;
 public class StudentProfile extends BaseEntity {
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", unique = true, nullable = false)
+    @JoinColumn(name = "`user_id`", unique = true, nullable = false)
     private User user;
 
     @Lob
@@ -44,8 +44,8 @@ public class StudentProfile extends BaseEntity {
     private String address;
 
     @ElementCollection
-    @CollectionTable(name = "profile_skills", joinColumns = @JoinColumn(name = "profile_id"))
-    @Column(name = "skill")
+    @CollectionTable(name = "`profile_skills`", joinColumns = @JoinColumn(name = "`profile_id`"))
+    @Column(name = "`skill`")
     @Builder.Default
     private List<String> skills = new ArrayList<>();
 
@@ -65,12 +65,12 @@ public class StudentProfile extends BaseEntity {
     private String resumeLink;
 
     @ElementCollection
-    @CollectionTable(name = "profile_projects", joinColumns = @JoinColumn(name = "profile_id"))
+    @CollectionTable(name = "`profile_projects`", joinColumns = @JoinColumn(name = "`profile_id`"))
     @Builder.Default
     private List<ProjectItem> projects = new ArrayList<>();
 
     @ElementCollection
-    @CollectionTable(name = "profile_links", joinColumns = @JoinColumn(name = "profile_id"))
+    @CollectionTable(name = "`profile_links`", joinColumns = @JoinColumn(name = "`profile_id`"))
     @Builder.Default
     private List<LinkItem> links = new ArrayList<>();
 }

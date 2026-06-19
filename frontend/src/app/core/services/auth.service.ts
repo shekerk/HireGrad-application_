@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { AuthUser, LoginRequest, UserRole } from '../models/user.model';
+import { environment } from '../../../environments/environment.prod';
 
 interface ApiResponse<T> {
   success: boolean;
@@ -17,7 +18,7 @@ export class AuthService {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly isBrowser = isPlatformBrowser(this.platformId);
   private readonly http = inject(HttpClient);
-  private readonly API = '/api/auth';
+  private readonly API = environment.apiUrl + '/api/auth';
 
   private readonly _user = signal<AuthUser | null>(this.restore());
 
@@ -38,7 +39,7 @@ export class AuthService {
 
   /** Student replaces their temporary password; clears the forced-change flag locally on success. */
   changePassword(newPassword: string): Observable<void> {
-    return this.http.post<ApiResponse<void>>('/api/student/change-password', { newPassword }).pipe(
+    return this.http.post<ApiResponse<void>>(environment.apiUrl + '/api/student/change-password', { newPassword }).pipe(
       map(() => void 0),
       tap(() => {
         const u = this._user();

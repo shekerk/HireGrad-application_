@@ -1,7 +1,7 @@
 package com.hiregrad.backend.common.exception;
 
-import com.hiregrad.backend.common.dto.ApiError;
-import com.hiregrad.backend.common.dto.ApiResponse;
+import com.hiregrad.backend.dto.ApiError;
+import com.hiregrad.backend.dto.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;

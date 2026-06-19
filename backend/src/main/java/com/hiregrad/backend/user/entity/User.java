@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "users")
+@Table(name = "`users`")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -19,7 +19,7 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private String password; // BCrypt hash — never plain text
 
-    @Column(name = "full_name", nullable = false)
+    @Column(name = "`full_name`", nullable = false)
     private String fullName;
 
     @Enumerated(EnumType.STRING)

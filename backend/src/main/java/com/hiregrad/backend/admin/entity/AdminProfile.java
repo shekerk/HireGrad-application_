@@ -7,7 +7,7 @@ import lombok.*;
 
 /** Profile details for a placement-cell admin (parallel to StudentProfile, but admin-focused). */
 @Entity
-@Table(name = "admin_profiles")
+@Table(name = "`admin_profiles`")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -16,7 +16,7 @@ import lombok.*;
 public class AdminProfile extends BaseEntity {
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", unique = true, nullable = false)
+    @JoinColumn(name = "`user_id`", unique = true, nullable = false)
     private User user;
 
     @Lob

@@ -1,6 +1,7 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Injectable, PLATFORM_ID, computed, inject, signal } from '@angular/core';
 import { DashboardService, StudentDashboard } from './dashboard.service';
+import { environment } from '../../../environments/environment.prod';
 
 export interface AppNotification {
   id: string;
@@ -87,7 +88,7 @@ export class NotificationService {
         icon: 'user',
         title: 'Complete your profile',
         detail: `Your profile is ${d.profileCompletion}% complete — finish it to unlock more roles.`,
-        link: '/student/profile',
+        link: environment.apiUrl + '/student/profile',
       });
     }
 
@@ -98,7 +99,7 @@ export class NotificationService {
         icon: 'job',
         title: 'New role you qualify for',
         detail: `${j.jobTitle} at ${j.companyName}`,
-        link: '/student/jobs',
+        link: environment.apiUrl + '/student/jobs',
       });
     }
 
@@ -110,7 +111,7 @@ export class NotificationService {
           icon: 'check',
           title: "🎉 You've been selected!",
           detail: `${a.jobTitle} at ${a.companyName}`,
-          link: '/student/tracker',
+          link: environment.apiUrl + '/student/tracker',
         });
       }
     }

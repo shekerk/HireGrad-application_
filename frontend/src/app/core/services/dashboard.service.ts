@@ -3,6 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ApplicationStatus } from './application.service';
+import { environment } from '../../../environments/environment.prod';
 
 export interface StudentDashboard {
   fullName: string;
@@ -69,13 +70,13 @@ export class DashboardService {
 
   getStudentDashboard(): Observable<StudentDashboard> {
     return this.http
-      .get<ApiResponse<StudentDashboard>>('/api/student/dashboard')
+      .get<ApiResponse<StudentDashboard>>(environment.apiUrl + '/api/student/dashboard')
       .pipe(map((r) => r.data));
   }
 
   getAdminDashboard(): Observable<AdminDashboard> {
     return this.http
-      .get<ApiResponse<AdminDashboard>>('/api/admin/dashboard')
+      .get<ApiResponse<AdminDashboard>>(environment.apiUrl + '/api/admin/dashboard')
       .pipe(map((r) => r.data));
   }
 }

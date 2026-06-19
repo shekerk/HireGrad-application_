@@ -3,6 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ApplicationStatus } from './application.service';
+import { environment } from '../../../environments/environment.prod';
 
 export interface ReportStudent {
   username: string;
@@ -39,7 +40,7 @@ export class ReportService {
 
   getPlacementReport(): Observable<PlacementReport> {
     return this.http
-      .get<ApiResponse<PlacementReport>>('/api/admin/reports/placement')
+      .get<ApiResponse<PlacementReport>>(environment.apiUrl + '/api/admin/reports/placement')
       .pipe(map((r) => r.data));
   }
 }

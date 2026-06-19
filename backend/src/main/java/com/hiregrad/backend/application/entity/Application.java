@@ -11,10 +11,10 @@ import lombok.*;
  */
 @Entity
 @Table(
-        name = "applications",
+        name = "`applications`",
         uniqueConstraints = @UniqueConstraint(
-                name = "uk_application_job_student",
-                columnNames = {"job_id", "student_username"}
+                name = "`uk_application_job_student`",
+                columnNames = {"`job_id`", "`student_username`"}
         )
 )
 @Getter
@@ -25,11 +25,11 @@ import lombok.*;
 public class Application extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "job_id", nullable = false)
+    @JoinColumn(name = "`job_id`", nullable = false)
     private Job job;
 
     /** The applicant's login username (also used as roll number). */
-    @Column(name = "student_username", nullable = false)
+    @Column(name = "`student_username`", nullable = false)
     private String studentUsername;
 
     @Enumerated(EnumType.STRING)

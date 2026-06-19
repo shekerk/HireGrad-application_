@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { environment } from '../../../environments/environment.prod';
 
 export interface AdminMe {
   username: string;
@@ -32,7 +33,7 @@ interface ApiResponse<T> {
 @Injectable({ providedIn: 'root' })
 export class AdminService {
   private http = inject(HttpClient);
-  private readonly API = '/api/admin';
+  private readonly API =environment.apiUrl + '/api/admin';
 
   getMe(): Observable<AdminMe> {
     return this.http.get<ApiResponse<AdminMe>>(`${this.API}/me`).pipe(map((r) => r.data));

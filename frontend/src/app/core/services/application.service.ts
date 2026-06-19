@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { environment } from '../../../environments/environment.prod';
 
 export type ApplicationStatus = 'APPLIED' | 'SELECTED' | 'REJECTED';
 
@@ -45,26 +46,26 @@ export class ApplicationService {
   // === Student side ===
   apply(req: ApplyRequest): Observable<StudentApplication> {
     return this.http
-      .post<ApiResponse<StudentApplication>>('/api/student/applications', req)
+      .post<ApiResponse<StudentApplication>>(environment.apiUrl + '/api/student/applications', req)
       .pipe(map((r) => r.data));
   }
 
   myApplications(): Observable<StudentApplication[]> {
     return this.http
-      .get<ApiResponse<StudentApplication[]>>('/api/student/applications')
+      .get<ApiResponse<StudentApplication[]>>(environment.apiUrl + '/api/student/applications')
       .pipe(map((r) => r.data));
   }
 
   // === Admin side ===
   listForJob(jobId: number): Observable<AdminApplication[]> {
     return this.http
-      .get<ApiResponse<AdminApplication[]>>(`/api/admin/applications?jobId=${jobId}`)
+      .get<ApiResponse<AdminApplication[]>>(environment.apiUrl + `/api/admin/applications?jobId=${jobId}`)
       .pipe(map((r) => r.data));
   }
 
   updateStatus(applicationId: number, status: ApplicationStatus): Observable<AdminApplication> {
     return this.http
-      .patch<ApiResponse<AdminApplication>>(`/api/admin/applications/${applicationId}/status`, { status })
+      .patch<ApiResponse<AdminApplication>>(environment.apiUrl + `/api/admin/applications/${applicationId}/status`, { status })
       .pipe(map((r) => r.data));
   }
 }

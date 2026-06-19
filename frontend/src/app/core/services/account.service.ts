@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { environment } from '../../../environments/environment.prod';
 
 export interface CreateStudentRequest {
   username: string;
@@ -35,7 +36,7 @@ export class AccountService {
   /** Admin provisions a student login. Returns the credentials (incl. temp password) once. */
   createStudent(req: CreateStudentRequest): Observable<CreateStudentResponse> {
     return this.http
-      .post<ApiResponse<CreateStudentResponse>>('/api/admin/students', req)
+      .post<ApiResponse<CreateStudentResponse>>(environment.apiUrl+'/api/admin/students', req)
       .pipe(map((r) => r.data));
   }
 }
