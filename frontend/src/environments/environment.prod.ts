@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
 
- apiUrl: "http://localhost:8082"
+ apiUrl: "https://hiregrad-application-f7tf.onrender.com"
 };
