@@ -22,7 +22,7 @@ import { TiltDirective } from '../../../shared/directives/tilt.directive';
       <div class="mb-6 flex items-center justify-between gap-4">
         <div>
           <h1 class="text-2xl font-bold text-slate-900 dark:text-white" style="font-family:'Bricolage Grotesque',ui-sans-serif">My profile</h1>
-          <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Your placement-cell details, visible to students who reach out.</p>
+
         </div>
         <div class="flex items-center gap-2">
           @if (!editing()) {
