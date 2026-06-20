@@ -19,7 +19,7 @@ interface StudentRow {
       <div class="mb-6 flex flex-wrap items-end justify-between gap-3">
         <div>
           <h1 class="text-2xl font-bold text-slate-900 dark:text-white" style="font-family:'Bricolage Grotesque',ui-sans-serif">Placement report analysis</h1>
-          <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Real-time placement outcomes across companies, colleges and departments.</p>
+//           <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Real-time placement outcomes across companies, colleges and departments.</p>
         </div>
         <div class="flex items-center gap-2">
           <button id="report-refresh-btn" (click)="reload()" class="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 px-3 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800">

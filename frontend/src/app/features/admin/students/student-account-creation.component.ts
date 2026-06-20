@@ -21,9 +21,9 @@ interface IssuedCredential {
       <!-- header -->
       <div class="mb-6">
         <h1 class="text-2xl font-bold text-slate-900 dark:text-white" style="font-family:'Bricolage Grotesque',ui-sans-serif">Student signup</h1>
-        <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
-          Provision a login for a student. Share the username and temporary password with them — they'll be asked to set their own password on first sign-in.
-        </p>
+//         <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
+//           Provision a login for a student. Share the username and temporary password with them — they'll be asked to set their own password on first sign-in.
+//         </p>
       </div>
 
       @if (errorMsg()) {

@@ -15,9 +15,9 @@ import { TiltDirective } from '../../../shared/directives/tilt.directive';
       <!-- header -->
       <div class="mb-6">
         <h1 class="text-2xl font-bold text-slate-900 dark:text-white" style="font-family:'Bricolage Grotesque',ui-sans-serif">Application tracker</h1>
-        <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
-          Your single source of truth — statuses update automatically as the placement cell advances your applications.
-        </p>
+//         <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
+//           Your single source of truth — statuses update automatically as the placement cell advances your applications.
+//         </p>
       </div>
 
       <!-- summary cards -->
