@@ -41,6 +41,10 @@ public class StudentAccountService {
             throw new DuplicateResourceException("Username '" + req.getUsername() + "' is already taken.");
         }
 
+        if (profileRepository.existsByRollNumber(req.getRollNumber())) {
+            throw new DuplicateResourceException("Roll number '" + req.getRollNumber() + "' is already assigned to another student.");
+        }
+
         String tempPassword = (req.getTemporaryPassword() == null || req.getTemporaryPassword().isBlank())
                 ? generateTemporaryPassword()
                 : req.getTemporaryPassword();
