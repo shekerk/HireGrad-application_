@@ -28,6 +28,7 @@ backend/target/
 *.class
 backend/!.mvn/wrapper/maven-wrapper.jar
 backend/.mvn/.gitignore
+backend/.mvn/jvm.config
 
 # ===================== IDEs =====================
 .idea/
