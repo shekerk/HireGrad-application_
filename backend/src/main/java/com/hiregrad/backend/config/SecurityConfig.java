@@ -60,7 +60,7 @@ public class SecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
         // Allow any localhost port (dev servers move between 4200/4300/4301/…).
         // allowedOriginPatterns (not allowedOrigins) is required alongside allowCredentials(true).
-        config.setAllowedOriginPatterns(List.of("http://localhost:*", "http://127.0.0.1:*" , "https://hire-grad-application.vercel.app/"));
+        config.setAllowedOriginPatterns(List.of("http://localhost:*", "http://127.0.0.1:*" , "https://hire-grad-application.vercel.app/","https://beamish-crumble-380780.netlify.app/"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);
